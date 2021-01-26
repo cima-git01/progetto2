@@ -1,28 +1,22 @@
 package com.francescocimarra.server;
+// chat con una sola connessione
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-
+import java.net.*;
+import java.io.*;
 public class ServerChat {
 
 	public static void main(String[] args) {
 		ServerSocket sSocket;
 		Socket connessione = null;
 		int port = 2345;
-		
-		InputStreamReader in, input = null;
-		BufferedReader sIN, tastiera = null;
+		InputStreamReader in, input;
+		BufferedReader sIN, tastiera;
 		OutputStream out;
 		PrintWriter sOUT;
 		String msgDaInviare;
 		String msgRicevuto;
-		
-		try {
+		try
+		{
 			sSocket = new ServerSocket(port);
 			System.out.println("In attesa di connessioni...");
 			// ciclo infinito
@@ -34,9 +28,12 @@ public class ServerChat {
 				sOUT = new PrintWriter(out);
 				// flusso in ingresso da socket
 				in = new InputStreamReader(connessione.getInputStream());
-				sIN = new BufferedReader(input);
-				System.out.println("Chat inizializzata.");
-				while (true)
+				sIN = new BufferedReader(in);
+				// flusso in ingresso da tastiera
+				input = new InputStreamReader(System.in);
+				tastiera = new BufferedReader(input);
+				System.out.println("Chat inizzializzata con successo.");
+				while(true)
 				{
 					// stampa il messaggio ricevuto
 					msgRicevuto = sIN.readLine();
@@ -51,21 +48,22 @@ public class ServerChat {
 					// invia il messaggio
 					sOUT.println(msgDaInviare);
 					sOUT.flush();
-				}	
+				}
 			}
 		}
 		catch (IOException e)
 		{
 			System.out.println(e);
 		}
-		try {
+		try
+		{
 			connessione.close();
 		}
 		catch (IOException e)
 		{
 			System.out.println(e);
 		}
-
 	}
 
 }
+
